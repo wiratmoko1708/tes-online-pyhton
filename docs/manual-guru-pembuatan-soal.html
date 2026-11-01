@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Manual Guru — PyTest SMA</title>
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  :root { --ink:#172033; --muted:#68758a; --purple:#5d50d8; --purple-dark:#4437b9; --lav:#efedff; --line:#dfe3ee; --green:#198b64; --green-bg:#e9f8f1; --orange:#a86613; --orange-bg:#fff5df; --red:#b7434e; --red-bg:#fff0f1; --blue:#2465a9; --blue-bg:#eaf3ff; }
+  html, body { margin:0; padding:0; background:#e9ecf4; color:var(--ink); font-family:Arial, Helvetica, sans-serif; font-size:9pt; line-height:1.28; }
+  body { counter-reset: page; }
+  .page { position:relative; width:210mm; min-height:297mm; margin:0 auto 8mm; padding:9mm 15mm 13mm; background:#fff; page-break-after:always; overflow:hidden; }
+  .page:last-child { page-break-after:auto; }
+  .cover { display:flex; flex-direction:column; justify-content:space-between; background:linear-gradient(145deg,#4437b9 0%,#6656e8 53%,#8176f4 100%); color:#fff; }
+  .cover .brand { display:flex; align-items:center; gap:11px; font-size:18pt; font-weight:700; letter-spacing:-.3px; }
+  .brand-mark { display:inline-flex; align-items:center; justify-content:center; width:39px; height:39px; border-radius:12px; background:#fff; color:var(--purple-dark); font-size:24px; box-shadow:0 8px 20px #281d893d; }
+  .cover .eyebrow { color:#dcd9ff; }
+  .cover h1 { max-width:155mm; margin:14mm 0 7mm; font-size:35pt; line-height:1.08; letter-spacing:-1.1px; }
+  .cover .subtitle { max-width:145mm; color:#efeeff; font-size:14pt; line-height:1.5; }
+  .cover-card { width:100%; margin-top:13mm; padding:6mm; border:1px solid #ffffff3b; border-radius:15px; background:#ffffff18; }
+  .cover-card strong { display:block; font-size:13pt; margin-bottom:3mm; }
+  .cover-footer { display:flex; justify-content:space-between; align-items:end; color:#e3e1ff; font-size:9pt; }
+  h1,h2,h3,h4 { margin:0 0 5mm; color:var(--ink); line-height:1.15; letter-spacing:-.35px; }
+  h1 { font-size:22pt; }
+  h2 { font-size:15pt; padding-bottom:1.5mm; border-bottom:2px solid var(--lav); }
+  h3 { margin-top:3mm; font-size:11.5pt; color:var(--purple-dark); }
+  h4 { margin-top:3mm; margin-bottom:1.5mm; font-size:10.5pt; }
+  p { margin:0 0 2mm; }
+  ul, ol { margin:1mm 0 2.5mm; padding-left:6mm; }
+  li { margin-bottom:.7mm; }
+  .eyebrow { color:var(--purple); font-size:8.5pt; font-weight:700; letter-spacing:1.15px; text-transform:uppercase; }
+  .lead { color:var(--muted); font-size:12pt; }
+  .muted { color:var(--muted); }
+  .small { font-size:8.8pt; color:var(--muted); }
+  .header { display:flex; justify-content:space-between; align-items:start; margin-bottom:5mm; }
+  .header .doc-label { color:var(--muted); font-size:8.5pt; text-align:right; }
+  .rule { height:4px; width:25mm; margin:3mm 0 7mm; border-radius:4px; background:var(--purple); }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:3mm; }
+  .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:2.5mm; }
+  .card { padding:2.7mm; border:1px solid var(--line); border-radius:10px; background:#fff; }
+  .card.soft { border-color:#ddd9ff; background:var(--lav); }
+  .card.green { border-color:#bfe9d6; background:var(--green-bg); }
+  .card.orange { border-color:#f2d79f; background:var(--orange-bg); }
+  .card.red { border-color:#f0c5c9; background:var(--red-bg); }
+  .card h3 { margin:0 0 2mm; font-size:11.5pt; }
+  .number { display:inline-flex; align-items:center; justify-content:center; width:9mm; height:9mm; margin-right:2mm; border-radius:50%; background:var(--purple); color:#fff; font-weight:700; }
+  .step { display:flex; gap:3mm; align-items:flex-start; }
+  .step + .step { margin-top:4mm; }
+  .step p { flex:1; margin-top:1mm; }
+  table { width:100%; border-collapse:collapse; margin:1.5mm 0 2.5mm; font-size:8.2pt; }
+  th { padding:1.4mm 1.8mm; color:#fff; background:var(--purple); text-align:left; font-size:7.8pt; }
+  td { padding:1.4mm 1.8mm; border:1px solid var(--line); vertical-align:top; }
+  .compact-levels td { padding-top:.7mm; padding-bottom:.7mm; }
+  tr:nth-child(even) td { background:#fafbfe; }
+  code, pre { font-family:Menlo, Monaco, Consolas, monospace; }
+  code { padding:.4mm 1mm; border-radius:3px; background:#f0f1f6; color:#4336ac; font-size:9pt; }
+  pre { margin:2mm 0 3mm; padding:3mm; border-radius:8px; background:#172033; color:#f6f7ff; font-size:8.2pt; line-height:1.4; white-space:pre-wrap; }
+  .callout { display:flex; gap:3mm; margin:2.5mm 0; padding:2.5mm; border-left:4px solid var(--purple); border-radius:0 8px 8px 0; background:var(--lav); }
+  .callout strong { display:block; margin-bottom:1mm; }
+  .callout.warn { border-left-color:#d58a1e; background:var(--orange-bg); }
+  .callout.danger { border-left-color:var(--red); background:var(--red-bg); }
+  .callout.success { border-left-color:var(--green); background:var(--green-bg); }
+  .mock-shell { margin:4mm 0; padding:4mm; border:1px solid var(--line); border-radius:10px; background:#f7f8fc; }
+  .mock-top { display:flex; gap:2mm; align-items:center; padding-bottom:3mm; margin-bottom:3mm; border-bottom:1px solid var(--line); color:var(--muted); font-size:8.5pt; }
+  .dot { width:7px; height:7px; border-radius:50%; background:#e7a8ad; }
+  .dot:nth-child(2) { background:#f1ce88; }.dot:nth-child(3) { background:#9edabd; }
+  .mock-row { display:flex; gap:3mm; }
+  .mock-side { width:31mm; padding:3mm; border-radius:6px; background:#fff; color:var(--muted); font-size:8.5pt; }
+  .mock-side b { display:block; margin-bottom:3mm; color:var(--ink); font-size:10pt; }
+  .mock-side div { padding:2mm 1.5mm; }.mock-side .active { border-radius:5px; background:var(--lav); color:var(--purple-dark); font-weight:700; }
+  .mock-main { flex:1; padding:3mm; border-radius:6px; background:#fff; }
+  .mock-title { display:flex; justify-content:space-between; align-items:center; margin-bottom:3mm; font-weight:700; }
+  .mock-button { display:inline-block; padding:1.5mm 3mm; border-radius:5px; background:var(--purple); color:#fff; font-size:8pt; font-weight:700; }
+  .mock-field { height:8mm; margin:2mm 0 3mm; padding:2mm; border:1px solid var(--line); border-radius:4px; color:#9aa3b3; font-size:8.5pt; }
+  .mock-check { display:inline-flex; width:4mm; height:4mm; margin-right:2mm; border:1px solid var(--purple); border-radius:2px; background:var(--purple); vertical-align:-.5mm; }
+  .checklist { list-style:none; padding:0; }
+  .checklist li { position:relative; padding-left:6mm; }
+  .checklist li:before { content:'✓'; position:absolute; left:0; color:var(--green); font-weight:700; }
+  .toc { display:grid; grid-template-columns:1fr 1fr; gap:2mm 8mm; margin-top:5mm; }
+  .toc div { display:flex; gap:3mm; padding:2.5mm 0; border-bottom:1px solid var(--line); }
+  .toc b { color:var(--purple); }
+  .footer { position:absolute; left:15mm; right:15mm; bottom:6mm; display:flex; justify-content:space-between; color:#8c96a8; font-size:7.5pt; border-top:1px solid var(--line); padding-top:2mm; }
+  .cover .footer { color:#dcd9ff; border-top-color:#ffffff38; }
+  .avoid { break-inside:avoid; }
+  @media print { html, body { background:#fff; } .page { margin:0; } }
+</style>
+</head>
+<body>
+
+<section class="page cover">
+  <div>
+    <div class="brand"><span class="brand-mark">⌁</span><span>PyTest SMA</span></div>
+    <div class="eyebrow" style="margin-top:20mm">PANDUAN OPERASIONAL GURU</div>
+    <h1>Manual Membuat Soal &amp; Mengelola Ujian</h1>
+    <p class="subtitle">Panduan lengkap untuk membuat soal coding Python, menyiapkan test case, memilih soal yang tampil, dan menerbitkan ujian untuk siswa.</p>
+    <div class="cover-card">
+      <strong>Alamat aplikasi</strong>
+      <code style="color:#fff;background:#ffffff25">http://pythontest.test/</code>
+      <p style="margin:4mm 0 0;color:#eeeaff">Edisi untuk guru dan super admin · Bahasa Indonesia</p>
+    </div>
+  </div>
+  <div class="cover-footer"><span>PyTest SMA · Coding Assessment</span><span>28 Oktober 2026</span></div>
+  <div class="footer"><span>Manual Guru</span><span>PyTest SMA</span></div>
+</section>
+
+<section class="page">
+  <div class="header"><div><div class="eyebrow">01 · Mulai dari sini</div><h1>Tujuan dan alur kerja</h1></div><div class="doc-label">MANUAL GURU<br>Versi 1.0</div></div>
+  <div class="rule"></div>
+  <p class="lead">Gunakan manual ini ketika menyiapkan ujian coding Python dari awal sampai siap dikerjakan siswa.</p>
+  <h3>Yang akan dipelajari</h3>
+  <div class="grid2">
+    <div class="card soft"><h3>Bank soal</h3><p>Membuat instruksi, kode awal, level, bobot, dan test case yang terukur.</p></div>
+    <div class="card soft"><h3>Komposisi ujian</h3><p>Menentukan soal mana yang aktif sehingga hanya soal terpilih yang tampil dan dinilai.</p></div>
+    <div class="card soft"><h3>Publikasi</h3><p>Mengatur ujian sebagai draft, published, atau closed sesuai kesiapan.</p></div>
+    <div class="card soft"><h3>Penilaian</h3><p>Memahami cara sistem membandingkan output dan menghitung nilai otomatis.</p></div>
+  </div>
+  <h3>Alur singkat</h3>
+  <div class="card">
+    <div class="step"><span class="number">1</span><p><b>Masuk</b> menggunakan akun guru atau super admin.</p></div>
+    <div class="step"><span class="number">2</span><p><b>Buat ujian</b> dan simpan sebagai <i>Draft</i>.</p></div>
+    <div class="step"><span class="number">3</span><p><b>Tambah soal</b> dengan instruksi yang jelas serta minimal dua test case.</p></div>
+    <div class="step"><span class="number">4</span><p><b>Pilih soal aktif</b> pada halaman kelola ujian.</p></div>
+    <div class="step"><span class="number">5</span><p><b>Periksa ulang</b> bobot, test case, level, dan jumlah soal.</p></div>
+    <div class="step"><span class="number">6</span><p>Ubah status menjadi <b>Published</b> agar siswa dapat mengakses.</p></div>
+  </div>
+  <div class="callout success"><div>✓</div><div><strong>Prinsip aman</strong>Simpan ujian sebagai Draft sampai seluruh soal dan test case selesai diperiksa. Dengan begitu siswa belum dapat melihat perubahan yang sedang dikerjakan.</div></div>
+  <h3>Istilah penting</h3>
+  <table><tr><th>Istilah</th><th>Arti dalam aplikasi</th></tr><tr><td><b>Ujian</b></td><td>Wadah yang berisi judul, deskripsi, durasi, status, dan kumpulan soal.</td></tr><tr><td><b>Soal</b></td><td>Instruksi coding Python yang dikerjakan siswa.</td></tr><tr><td><b>Test case</b></td><td>Pasangan input dan output yang digunakan untuk memeriksa jawaban.</td></tr><tr><td><b>Soal aktif</b></td><td>Soal yang dicentang untuk tampil dan ikut penilaian ujian.</td></tr><tr><td><b>Soal contoh</b></td><td>Soal aktif yang tidak dihitung ke nilai akhir; dipakai sebagai latihan atau peragaan pola.</td></tr></table>
+  <div class="footer"><span>Manual Guru · Tujuan dan alur kerja</span><span>PyTest SMA</span></div>
+</section>
+
+<section class="page">
+  <div class="header"><div><div class="eyebrow">02 · Akses guru</div><h1>Login dan dashboard</h1></div><div class="doc-label">LANGKAH 1</div></div>
+  <div class="rule"></div>
+  <h3>1. Buka aplikasi</h3>
+  <ol><li>Buka <code>http://pythontest.test/</code> pada browser.</li><li>Masukkan <b>Username</b> dan <b>Password</b> akun guru.</li><li>Klik <b>Masuk ke dashboard →</b>.</li></ol>
+  <div class="callout warn"><div>!</div><div><strong>Jika belum memiliki akun</strong>Hubungi super admin sekolah. Akun siswa, guru, dan super admin memiliki menu yang berbeda.</div></div>
+  <h3>2. Kenali menu guru</h3>
+  <div class="mock-shell">
+    <div class="mock-top"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:3mm">PyTest SMA · Dashboard</span></div>
+    <div class="mock-row"><div class="mock-side"><b>⌁ PyTest SMA</b><div class="active">⌂ Dashboard</div><div>▣ Bank ujian</div><div>⇧ Import siswa</div><div style="margin-top:18mm">↪ Keluar</div></div><div class="mock-main"><div class="mock-title"><span>Ringkasan aktivitas</span><span class="mock-button">＋ Buat ujian baru</span></div><div class="grid3"><div class="card"><div class="small">Total ujian</div><b style="font-size:17pt">3</b></div><div class="card"><div class="small">Diterbitkan</div><b style="font-size:17pt">2</b></div><div class="card"><div class="small">Pengumpulan</div><b style="font-size:17pt">18</b></div></div><div class="mock-field">Ujian terbaru · Kelola bank soal dan publikasi ujian</div></div></div>
+  </div>
+  <table><tr><th>Menu</th><th>Fungsi</th></tr><tr><td><b>Dashboard</b></td><td>Melihat ringkasan ujian, jumlah siswa, ujian published, dan hasil terbaru.</td></tr><tr><td><b>Bank ujian</b></td><td>Membuat ujian, membuka daftar soal, memilih soal aktif, mengedit, dan menghapus soal.</td></tr><tr><td><b>Import siswa</b></td><td>Memasukkan banyak akun siswa dari CSV atau XLSX.</td></tr></table>
+  <h3>3. Bedakan peran</h3>
+  <div class="grid2"><div class="card"><h3>Guru</h3><p>Dapat membuat dan mengelola ujian serta soal yang dibuat untuk kelasnya.</p></div><div class="card"><h3>Super admin</h3><p>Memiliki seluruh akses guru dan dapat mengelola akun pengguna sistem.</p></div></div>
+  <div class="footer"><span>Manual Guru · Login dan dashboard</span><span>PyTest SMA</span></div>
+</section>
+
+<section class="page">
+  <div class="header"><div><div class="eyebrow">03 · Menyiapkan wadah</div><h1>Membuat ujian baru</h1></div><div class="doc-label">LANGKAH 2</div></div>
+  <div class="rule"></div>
+  <ol><li>Dari dashboard, klik <b>＋ Buat ujian baru</b>.</li><li>Isi informasi dasar ujian.</li><li>Pilih status <b>Draft</b> terlebih dahulu.</li><li>Klik <b>Simpan ujian</b>. Aplikasi akan membawa Anda ke halaman tambah soal.</li></ol>
+  <h3>Kolom yang harus diisi</h3>
+  <table><tr><th>Kolom</th><th>Isi yang disarankan</th><th>Contoh</th></tr><tr><td><b>Judul ujian</b></td><td>Singkat, spesifik, dan mudah dikenali siswa.</td><td>Latihan If Else Python — X IPA 1</td></tr><tr><td><b>Deskripsi</b></td><td>Materi, aturan pengerjaan, dan instruksi umum.</td><td>Gunakan Python 3. Kerjakan semua soal yang aktif.</td></tr><tr><td><b>Durasi</b></td><td>Waktu dalam menit. Sesuaikan dengan jumlah dan tingkat kesulitan soal.</td><td>60 menit untuk 7–10 soal entry</td></tr><tr><td><b>Status</b></td><td><b>Draft</b> untuk persiapan, <b>Published</b> untuk siswa, <b>Closed</b> untuk menutup akses.</td><td>Draft saat membuat soal</td></tr></table>
+  <div class="callout"><div>i</div><div><strong>Rekomendasi durasi</strong>Soal entry biasanya membutuhkan 5–8 menit per soal, belum termasuk waktu membaca instruksi. Tambahkan waktu cadangan untuk siswa yang baru belajar.</div></div>
+  <h3>Urutan kerja yang disarankan</h3>
+  <div class="grid3"><div class="card soft"><h3>A. Rancang</h3><p>Tentukan tujuan pembelajaran dan jumlah soal.</p></div><div class="card soft"><h3>B. Bangun</h3><p>Masukkan soal dan test case dalam status Draft.</p></div><div class="card soft"><h3>C. Terbitkan</h3><p>Aktifkan soal terpilih, lalu ubah ke Published.</p></div></div>
+  <h3>Memilih ujian yang akan dikelola</h3>
+  <p>Pada menu <b>Bank ujian</b>, setiap baris menampilkan nama, status, durasi, dan jumlah soal aktif. Klik <b>Kelola</b> pada ujian yang akan diubah. Jumlah soal pada daftar ujian adalah jumlah soal yang sedang aktif, bukan seluruh soal yang tersimpan di bank.</p>
+  <div class="callout danger"><div>!</div><div><strong>Jangan menerbitkan terlalu cepat</strong>Soal baru dapat dibuat ketika ujian sudah published, tetapi lebih aman menyelesaikan dan memeriksa semuanya dalam Draft terlebih dahulu.</div></div>
+  <div class="footer"><span>Manual Guru · Membuat ujian baru</span><span>PyTest SMA</span></div>
+</section>
+
+<section class="page">
+  <div class="header"><div><div class="eyebrow">04 · Menulis soal</div><h1>Membuat soal coding</h1></div><div class="doc-label">LANGKAH 3</div></div>
+  <div class="rule"></div>
+  <p>Setelah ujian dibuat, klik <b>＋ Tambah soal</b>. Form soal terdiri dari instruksi, kode awal, level, bobot, status penilaian, dan test case.</p>
+  <div class="mock-shell" style="margin:1mm 0 0"><div class="mock-title"><span>Tambah soal coding</span><span class="mock-button">Simpan soal</span></div><div class="small">Pertanyaan / instruksi</div><div class="mock-field" style="height:9mm">Buat program yang membaca sebuah nilai lalu mencetak kategori sesuai ketentuan...</div><div class="grid2"><div><div class="small">Kode awal (opsional)</div><div class="mock-field" style="height:8mm;font-family:monospace">score = int(input())<br><br># Tulis kode di sini</div></div><div><div class="small">Level soal</div><div class="mock-field">Entry ▾</div><div class="small">Bobot nilai</div><div class="mock-field">10</div><div class="small">Status penilaian</div><div class="mock-field" style="height:5mm">☑ Soal dinilai</div></div></div><div class="small">Test case · Input dan output yang diharapkan</div><div class="mock-field" style="height:5mm">95 &nbsp;&nbsp;&nbsp; Grade: A</div></div>
+  <h3>A. Pertanyaan / instruksi</h3>
+  <p>Tulis masalah yang harus diselesaikan, data input, aturan kondisi, dan output yang diwajibkan. Gunakan kata kerja yang jelas seperti <i>baca</i>, <i>periksa</i>, <i>cetak</i>, atau <i>tampilkan</i>.</p>
+  <div class="card soft"><b>Template instruksi</b><pre style="margin-bottom:0">Buat program yang membaca [jenis input].
+Jika [kondisi 1], cetak [output 1].
+Jika tidak, tetapi [kondisi 2], cetak [output 2].
+Selain itu, cetak [output 3].</pre></div>
+  <h3>B. Kode awal</h3>
+  <p>Kode awal bersifat opsional. Gunakan untuk memberi struktur kepada siswa tanpa memberikan seluruh jawaban. Kode awal yang baik mempersiapkan pembacaan input, tetapi menyisakan logika percabangan untuk dikerjakan.</p>
+  <pre>score = int(input())
+
+# Lengkapi percabangan if, elif, dan else di bawah ini</pre>
+  <h3>C. Level soal</h3>
+  <table class="compact-levels"><tr><th>Level</th><th>Ciri</th><th>Contoh</th></tr><tr><td><b>Entry</b></td><td>Satu input, kondisi sederhana, output langsung.</td><td>Nilai minimal 75 → Lulus.</td></tr><tr><td><b>Middle</b></td><td>Beberapa kondisi, kombinasi aturan, atau validasi.</td><td>Tarif berdasarkan usia dan hari.</td></tr><tr><td><b>Advanced</b></td><td>Logika lebih panjang dan beberapa aturan.</td><td>Validasi banyak aturan.</td></tr></table>
+  <div class="footer"><span>Manual Guru · Membuat soal coding</span><span>PyTest SMA</span></div>
+</section>
+
+<section class="page">
+  <div class="header"><div><div class="eyebrow">05 · Menguji jawaban</div><h1>Menyiapkan test case</h1></div><div class="doc-label">LANGKAH 4</div></div>
+  <div class="rule"></div>
+  <p>Test case adalah standar jawaban yang dipakai sistem. Setiap baris berisi <b>Input</b> dan <b>Output yang diharapkan</b>.</p>
+  <h3>Aturan pengisian</h3>
+  <ul class="checklist"><li>Test case pertama menjadi <b>contoh publik</b> yang dapat dicoba siswa.</li><li>Tambahkan minimal satu atau dua test case berikutnya sebagai pemeriksaan tambahan.</li><li>Input harus sesuai format yang dijelaskan pada instruksi.</li><li>Output harus ditulis persis, termasuk huruf besar-kecil dan tanda baca.</li><li>Jangan menulis prompt seperti <code>Masukkan nilai:</code> pada output yang diharapkan.</li><li>Gunakan test case batas, misalnya tepat <code>75</code> untuk aturan “minimal 75”.</li></ul>
+  <h3>Contoh soal sesuai pola nilai</h3>
+  <p><b>Instruksi:</b> baca nilai ujian. Jika <code>score &gt;= 90</code>, cetak <code>Grade: A</code>. Jika <code>score &gt;= 80</code>, cetak <code>Grade: B</code>. Selain itu, cetak <code>Study harder!</code>.</p>
+  <table><tr><th>No.</th><th>Input</th><th>Output yang diharapkan</th><th>Tujuan</th></tr><tr><td>1</td><td><code>95</code></td><td><code>Grade: A</code></td><td>Memeriksa kondisi pertama</td></tr><tr><td>2</td><td><code>80</code></td><td><code>Grade: B</code></td><td>Memeriksa batas elif</td></tr><tr><td>3</td><td><code>70</code></td><td><code>Study harder!</code></td><td>Memeriksa else</td></tr><tr><td>4</td><td><code>89</code></td><td><code>Grade: B</code></td><td>Memeriksa nilai di antara batas</td></tr></table>
+  <h3>Contoh format pada form</h3>
+  <div class="mock-shell"><div class="small">Test case</div><div style="display:grid;grid-template-columns:1fr 2fr;gap:2mm;align-items:center;margin-top:2mm"><b style="font-size:8.5pt">Input</b><b style="font-size:8.5pt">Output yang diharapkan</b><div class="mock-field">95</div><div class="mock-field">Grade: A</div><div class="mock-field">80</div><div class="mock-field">Grade: B</div><div class="mock-field">70</div><div class="mock-field">Study harder!</div></div></div>
+  <div class="callout warn"><div>!</div><div><strong>Perhatikan normalisasi output</strong>Aplikasi mengabaikan spasi di ujung baris dan baris kosong di bagian luar output. Namun, jangan mengandalkan ini untuk mengubah isi jawaban; tulis expected output sejelas mungkin.</div></div>
+  <h3>Menambah test case</h3>
+  <ol><li>Isi baris pertama yang wajib diisi.</li><li>Klik <b>＋ Tambah test case</b> untuk menambah baris.</li><li>Isi input dan output pada baris baru.</li><li>Pastikan test case yang tidak digunakan dikosongkan agar tidak ikut tersimpan.</li></ol>
+  <div class="footer"><span>Manual Guru · Menyiapkan test case</span><span>PyTest SMA</span></div>
+</section>
+
+<section class="page">
+  <div class="header"><div><div class="eyebrow">06 · Mengatur bank soal</div><h1>Memilih soal yang tampil</h1></div><div class="doc-label">LANGKAH 5</div></div>
+  <div class="rule"></div>
+  <p>Fitur pilihan soal memungkinkan satu ujian memiliki bank soal lebih banyak daripada soal yang diberikan pada satu pelaksanaan.</p>
+  <h3>Langkah memilih soal</h3>
+  <ol><li>Buka <b>Bank ujian</b>.</li><li>Klik <b>Kelola</b> pada ujian yang diinginkan.</li><li>Pada bagian <b>Pilih soal yang tampil</b>, lihat daftar seluruh soal.</li><li>Centang soal yang ingin diberikan kepada siswa.</li><li>Hilangkan centang pada soal yang ingin disimpan di bank tetapi tidak diberikan.</li><li>Klik <b>Simpan pilihan</b>.</li></ol>
+  <div class="mock-shell"><div class="mock-title"><span>Pilih soal yang tampil <span class="small">(16/24 aktif)</span></span><span class="mock-button">Simpan pilihan</span></div><table style="margin:0"><tr><th>Aktif</th><th>Pertanyaan</th><th>Level</th><th>Bobot</th></tr><tr><td><span class="mock-check"></span></td><td>Contoh: Kategori usia</td><td style="color:var(--green);font-weight:700">Entry</td><td><span style="display:inline-block;padding:1mm 2.5mm;border-radius:2mm;background:#fdf0dd;color:#b26a00;font-weight:700;font-size:8pt">Contoh</span></td></tr><tr><td><span class="mock-check"></span></td><td>Grade nilai ujian</td><td style="color:var(--green);font-weight:700">Entry</td><td>10</td></tr><tr><td><span style="display:inline-flex;width:4mm;height:4mm;margin-right:2mm;border:1px solid #aab2c1;border-radius:2px;vertical-align:-.5mm"></span></td><td>Kategori suhu</td><td style="color:var(--green);font-weight:700">Entry</td><td>10</td></tr></table></div>
+  <h3>Makna status aktif</h3>
+  <div class="grid2"><div class="card green"><h3>Dicentang / aktif</h3><p>Soal tampil pada halaman siswa dan ikut dihitung saat submit, kecuali soal yang ditandai contoh.</p></div><div class="card"><h3>Tidak dicentang</h3><p>Soal tetap tersimpan dan dapat diedit, tetapi tidak tampil dan tidak dinilai pada ujian tersebut.</p></div></div>
+  <div class="callout success"><div>✓</div><div><strong>Keadaan saat ini</strong>Ujian ID 1 memiliki 16 soal aktif dari 24 soal pada bank soal: 14 soal dinilai dan 2 soal contoh. Delapan soal level middle masih tersimpan sebagai cadangan nonaktif.</div></div>
+  <h3>Contoh komposisi</h3>
+  <table><tr><th>Tujuan</th><th>Pilihan</th></tr><tr><td>Latihan dasar</td><td>5 entry, 2 middle</td></tr><tr><td>Ujian campuran</td><td>4 entry, 4 middle, 1 advanced</td></tr><tr><td>Remedial</td><td>10 entry dengan bobot kecil dan test case sederhana</td></tr></table>
+  <div class="callout danger"><div>!</div><div><strong>Minimal satu soal</strong>Aplikasi tidak mengizinkan menyimpan pilihan kosong jika ujian sudah memiliki soal. Ini mencegah ujian published tampil tanpa materi.</div></div>
+  <div class="footer"><span>Manual Guru · Memilih soal yang tampil</span><span>PyTest SMA</span></div>
+</section>
+
+<section class="page">
+  <div class="header"><div><div class="eyebrow">07 · Siap diberikan</div><h1>Memeriksa dan menerbitkan ujian</h1></div><div class="doc-label">LANGKAH 6</div></div>
+  <div class="rule"></div>
+  <h3>Checklist sebelum Published</h3>
+  <ul class="checklist"><li>Judul dan deskripsi sudah benar.</li><li>Durasi sesuai jumlah serta tingkat kesulitan soal.</li><li>Jumlah soal aktif sudah sesuai rencana.</li><li>Setiap soal dinilai memiliki bobot minimal 1, sedangkan soal contoh bertanda <b>Contoh</b>.</li><li>Setiap soal memiliki test case publik dan test case pemeriksaan.</li><li>Expected output tidak mengandung prompt tambahan.</li><li>Level soal sudah sesuai: entry, middle, atau advanced.</li><li>Tidak ada soal yang masih berupa instruksi sementara.</li></ul>
+  <h3>Menerbitkan</h3>
+  <ol><li>Pada halaman kelola ujian, klik <b>Edit info</b>.</li><li>Ubah status dari <b>Draft</b> menjadi <b>Published — siswa dapat mengakses</b>.</li><li>Klik <b>Simpan ujian</b>.</li><li>Periksa dashboard siswa atau minta satu akun siswa memastikan ujian terlihat.</li></ol>
+  <div class="grid3"><div class="card"><h3>Draft</h3><p class="small">Hanya guru yang menyiapkan. Siswa belum dapat mengakses.</p></div><div class="card green"><h3>Published</h3><p class="small">Siswa dapat melihat dan mengerjakan soal aktif.</p></div><div class="card red"><h3>Closed</h3><p class="small">Digunakan untuk menutup ujian setelah periode selesai.</p></div></div>
+  <h3>Mengubah ujian yang sudah Published</h3>
+  <p>Guru dapat mengubah pilihan soal, instruksi, bobot, dan test case. Namun, hindari perubahan besar ketika siswa sedang mengerjakan. Jika perlu revisi besar, lebih aman menutup ujian lama dan membuat ujian baru atau mengerjakannya pada Draft.</p>
+  <div class="callout warn"><div>!</div><div><strong>Jaga konsistensi penilaian</strong>Perubahan test case dapat membuat hasil jawaban berbeda dari kondisi ketika siswa mulai mengerjakan. Catat waktu perubahan dan komunikasikan kepada siswa.</div></div>
+  <h3>Mengedit atau menghapus soal</h3>
+  <p>Gunakan tombol <b>Edit</b> pada baris soal untuk memperbarui instruksi, kode awal, level, bobot, atau test case. Tombol <b>Hapus</b> menghapus soal beserta test case terkait; lakukan hanya jika yakin soal tersebut tidak dibutuhkan lagi.</p>
+  <div class="footer"><span>Manual Guru · Memeriksa dan menerbitkan</span><span>PyTest SMA</span></div>
+</section>
+
+<section class="page">
+  <div class="header"><div><div class="eyebrow">08 · Cara sistem menilai</div><h1>Penilaian otomatis</h1></div><div class="doc-label">REFERENSI</div></div>
+  <div class="rule"></div>
+  <p>Saat siswa menekan <b>Submit jawaban</b>, sistem menjalankan kode Python siswa pada setiap test case aktif.</p>
+  <h3>Rumus nilai per soal</h3>
+  <div class="card soft" style="text-align:center;margin:4mm 0"><div style="font-size:16pt;font-weight:700;color:var(--purple-dark)">Nilai soal = Bobot × (Test case lulus ÷ Total test case)</div></div>
+  <h3>Rumus nilai akhir</h3>
+  <div class="card soft" style="text-align:center;margin:4mm 0"><div style="font-size:16pt;font-weight:700;color:var(--purple-dark)">Nilai akhir = Total nilai soal ÷ Total bobot soal × 100</div></div>
+  <h3>Contoh perhitungan</h3>
+  <table><tr><th>Soal</th><th>Bobot</th><th>Test case lulus</th><th>Nilai soal</th></tr><tr><td>Grade nilai</td><td>10</td><td>3 dari 4</td><td>7,5</td></tr><tr><td>Kategori usia</td><td>10</td><td>2 dari 2</td><td>10</td></tr><tr><td>Diskon belanja</td><td>20</td><td>1 dari 2</td><td>10</td></tr><tr><td><b>Total</b></td><td><b>40</b></td><td>—</td><td><b>27,5</b></td></tr></table>
+  <p>Nilai akhir pada contoh adalah <code>27,5 ÷ 40 × 100 = 68,75</code>.</p>
+  <h3>Soal contoh (tidak dinilai)</h3>
+  <p>Soal dapat ditandai sebagai <b>contoh</b> dengan menghilangkan centang <b>Soal dinilai</b> pada form soal. Soal contoh tetap tampil untuk siswa dan test case-nya tetap dijalankan, tetapi nilainya tidak dimasukkan ke total maupun total bobot. Pada halaman kelola ujian, soal seperti ini ditampilkan dengan badge <b>Contoh</b>, dan pada hasil siswa tertulis <b>Tidak dinilai</b>.</p>
+  <div class="callout"><div>i</div><div><strong>Gunakan sebagai peragaan pola</strong>Tempatkan soal contoh di urutan awal (misalnya pola if/elif/else dengan kode awal lengkap) agar siswa melihat contoh sebelum mengerjakan soal yang dinilai.</div></div>
+  <h3>Hal yang perlu dipahami</h3>
+  <ul><li>Kode yang menghasilkan error atau output berbeda dianggap tidak lulus pada test case tersebut.</li><li>Test case publik juga tetap menjadi bagian penilaian, bukan hanya contoh.</li><li>Soal contoh tidak dihitung ke nilai akhir, meskipun jawabannya benar.</li><li>Jika soal tidak memiliki test case, nilai soal tersebut akan menjadi 0.</li><li>Siswa dapat mencoba kode pada test case publik dengan tombol <b>▶ Tes kode</b> sebelum submit.</li><li>Setelah submit, jawaban tidak dapat diubah oleh siswa.</li></ul>
+  <div class="callout"><div>i</div><div><strong>Rancang bobot dengan sadar</strong>Jika semua soal memiliki bobot sama, setiap soal berkontribusi sama. Jika ada soal middle yang lebih penting, berikan bobot lebih besar daripada soal entry.</div></div>
+  <div class="footer"><span>Manual Guru · Penilaian otomatis</span><span>PyTest SMA</span></div>
+</section>
+
+<section class="page">
+  <div class="header"><div><div class="eyebrow">09 · Pola soal</div><h1>Contoh soal entry yang baik</h1></div><div class="doc-label">REFERENSI</div></div>
+  <div class="rule"></div>
+  <p>Berikut pola yang cocok untuk pemula. Setiap soal menguji percabangan sederhana dan dapat dibuat dengan satu input.</p>
+  <table><tr><th>No.</th><th>Judul soal</th><th>Fokus kondisi</th><th>Contoh batas</th></tr><tr><td>1</td><td>Grade nilai ujian</td><td><code>&gt;= 90</code>, <code>&gt;= 80</code>, else</td><td>90, 80</td></tr><tr><td>2</td><td>Status kelulusan sederhana</td><td>Lulus / tidak lulus</td><td>75</td></tr><tr><td>3</td><td>Bilangan positif, negatif, atau nol</td><td>Lebih besar, lebih kecil, sama</td><td>0</td></tr><tr><td>4</td><td>Cek ganjil atau genap</td><td>Operator modulus</td><td>0, 1</td></tr><tr><td>5</td><td>Kategori usia</td><td>Dewasa / anak-anak</td><td>17</td></tr><tr><td>6</td><td>Kategori suhu</td><td>Panas / nyaman / dingin</td><td>20, 30</td></tr><tr><td>7</td><td>Diskon belanja sederhana</td><td>Memenuhi batas belanja</td><td>100000</td></tr><tr><td>8</td><td>Membandingkan nilai dengan 10</td><td>Lebih besar atau sama</td><td>10</td></tr><tr><td>9</td><td>Kehadiran siswa</td><td>Memenuhi persentase minimum</td><td>75</td></tr><tr><td>10</td><td>Aksi lampu lalu lintas</td><td>Pencocokan teks</td><td>merah, kuning</td></tr></table>
+  <h3>Contoh lengkap soal nomor 1</h3>
+  <div class="card"><p><b>Judul:</b> Grade nilai ujian</p><p><b>Instruksi:</b> Baca satu nilai ujian. Jika nilai minimal 90, cetak <code>Grade: A</code>. Jika nilai minimal 80, cetak <code>Grade: B</code>. Selain itu, cetak <code>Study harder!</code>.</p><p><b>Kode awal:</b></p><pre style="margin-bottom:0">score = int(input())
+
+# Lengkapi percabangan if, elif, dan else</pre></div>
+  <h3>Checklist kualitas soal entry</h3>
+  <ul class="checklist"><li>Siswa hanya perlu memahami satu konsep utama.</li><li>Input dan output dijelaskan dengan bahasa sederhana.</li><li>Ada test case tepat pada batas kondisi.</li><li>Expected output pendek dan tidak ambigu.</li><li>Soal tidak membutuhkan library atau konsep yang belum diajarkan.</li></ul>
+  <div class="footer"><span>Manual Guru · Contoh soal entry</span><span>PyTest SMA</span></div>
+</section>
+
+<section class="page">
+  <div class="header"><div><div class="eyebrow">10 · Kualitas soal</div><h1>Praktik terbaik dan kesalahan umum</h1></div><div class="doc-label">REFERENSI</div></div>
+  <div class="rule"></div>
+  <div class="grid2"><div class="card green"><h3>✓ Lakukan</h3><ul><li>Gunakan kalimat instruksi yang langsung.</li><li>Tentukan batas kondisi dengan jelas.</li><li>Uji nilai tepat di bawah, tepat pada, dan tepat di atas batas.</li><li>Gunakan bobot sesuai tingkat kesulitan.</li><li>Simpan ujian sebagai Draft sampai siap.</li><li>Gunakan beberapa test case.</li></ul></div><div class="card red"><h3>✕ Hindari</h3><ul><li>Instruksi yang memiliki tafsir ganda.</li><li>Expected output yang berbeda dari instruksi.</li><li>Prompt input di dalam output yang dinilai.</li><li>Semua soal diberi bobot besar tanpa alasan.</li><li>Menghapus soal ketika siswa masih mengerjakan.</li><li>Menerbitkan soal tanpa memeriksa test case.</li></ul></div></div>
+  <h3>Masalah yang sering terjadi</h3>
+  <table><tr><th>Gejala</th><th>Penyebab yang mungkin</th><th>Solusi</th></tr><tr><td>Siswa tidak melihat soal</td><td>Soal tidak aktif atau ujian belum Published.</td><td>Centang soal, klik Simpan pilihan, dan periksa status ujian.</td></tr><tr><td>Test case selalu gagal</td><td>Output berbeda, huruf besar-kecil salah, atau kode mencetak prompt.</td><td>Samakan expected output dengan output yang benar-benar diminta.</td></tr><tr><td>Ujian tidak memiliki soal</td><td>Semua checkbox tidak dicentang.</td><td>Pilih minimal satu soal aktif.</td></tr><tr><td>Nilai tidak sesuai</td><td>Bobot atau jumlah test case tidak sesuai rancangan.</td><td>Hitung ulang bobot dan pastikan setiap test case valid.</td></tr><tr><td>Kode tidak berjalan</td><td>Python CLI tidak tersedia atau kode error.</td><td>Periksa konfigurasi Python dan baca pesan error pada hasil tes.</td></tr></table>
+  <h3>Checklist final satu halaman</h3>
+  <div class="card"><div class="grid2"><ul class="checklist"><li>Judul benar</li><li>Durasi benar</li><li>Deskripsi jelas</li><li>Level soal sesuai</li><li>Bobot terisi</li></ul><ul class="checklist"><li>Soal aktif sudah dipilih</li><li>Test case publik tersedia</li><li>Test case tersembunyi tersedia</li><li>Status Published pada waktu yang tepat</li><li>Informasi ujian disampaikan ke siswa</li></ul></div></div>
+  <div class="callout success"><div>✓</div><div><strong>Ujian siap</strong>Jika semua item checklist terpenuhi, ujian dapat diberikan kepada siswa dengan risiko kesalahan yang lebih kecil.</div></div>
+  <div class="footer"><span>Manual Guru · Praktik terbaik</span><span>PyTest SMA</span></div>
+</section>
+
+<section class="page">
+  <div class="header"><div><div class="eyebrow">11 · Penutup</div><h1>Ringkasan cepat</h1></div><div class="doc-label">REFERENSI</div></div>
+  <div class="rule"></div>
+  <div class="card soft"><h3>Urutan 30 detik</h3><p><b>Bank ujian → Kelola → Tambah soal → isi instruksi → pilih level → isi bobot → tentukan status penilaian → isi test case → Simpan soal → centang soal aktif → Simpan pilihan → Edit info → Published.</b></p></div>
+  <h3>Format soal yang dapat disalin</h3>
+  <pre>Judul: [nama singkat soal]
+
+Instruksi:
+Buat program yang membaca [input].
+Jika [kondisi 1], cetak [output 1].
+Jika [kondisi 2], cetak [output 2].
+Selain itu, cetak [output 3].
+
+Kode awal:
+[opsional — siapkan input, sisakan logika]
+
+Level: Entry / Middle / Advanced
+Bobot: [angka]
+Status: Dinilai / Contoh (tidak dinilai)
+
+Test case:
+Input: [contoh utama]
+Output: [expected output]
+Input: [batas kondisi]
+Output: [expected output]
+Input: [kasus lain]
+Output: [expected output]</pre>
+  <h3>Catatan versi aplikasi</h3>
+  <p>Manual ini disusun untuk PyTest SMA dengan fitur level soal <code>entry</code>, <code>middle</code>, <code>advanced</code>, serta pemilihan soal aktif pada setiap ujian.</p>
+  <div class="callout"><div>i</div><div><strong>Butuh bantuan?</strong>Simpan judul ujian, nomor soal, input test case, dan pesan error sebelum meminta bantuan. Informasi tersebut mempercepat pemeriksaan masalah.</div></div>
+  <div style="margin-top:30mm;text-align:center;color:var(--muted)"><div class="brand-mark" style="margin:0 auto 5mm;background:var(--lav);color:var(--purple-dark)">⌁</div><b style="font-size:14pt;color:var(--purple-dark)">PyTest SMA</b><p>Belajar kode. Uji kemampuan.</p></div>
+  <div class="footer"><span>Manual Guru · PyTest SMA</span><span>Selesai</span></div>
+</section>
+
+</body>
+</html>

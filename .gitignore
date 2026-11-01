@@ -1,0 +1,16 @@
+# Rahasia & konfigurasi lokal
+.env
+.env.*
+!.env.example
+
+# Berkas hasil (PDF/CSV berisi password & jawaban)
+storage/exports/*
+!storage/exports/.gitkeep
+storage/uploads/*
+!storage/uploads/.gitkeep
+public/kunci-jawaban-*.pdf
+
+# Berkas sementara
+*.log
+.DS_Store
+Thumbs.db
